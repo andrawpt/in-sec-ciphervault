@@ -57,7 +57,7 @@ python -m benchmark.run_benchmark --quick
 ## Project Structure
 
 ```
-lapor-siber/
+safe-report/
 ├── backend/
 │   ├── app/
 │   │   ├── main.py              # FastAPI application, CORS, integrity error handling
