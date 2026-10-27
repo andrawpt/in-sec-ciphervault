@@ -1,3 +1,9 @@
+<img width="1600" height="900" alt="image" src="https://github.com/user-attachments/assets/8f34d658-1cf2-485a-9272-defc1f83cdd2" />
+
+<img width="1918" height="965" alt="image" src="https://github.com/user-attachments/assets/1d110937-27da-4d8c-8ed1-23631c1c749b" />
+
+<img width="1918" height="961" alt="image" src="https://github.com/user-attachments/assets/cacec615-c7a6-4784-8c86-52c28e29430f" />
+
 # Safe Report — Phishing & Cyber Incident Reporting Portal
 
 Portal for a **Campus/Institutional CSIRT (Computer Security Incident Response Team)**. Victims or witnesses of phishing, online fraud, and account takeovers submit incident reports along with supporting evidence. CSIRT officers verify and respond to these reports.
