@@ -1,0 +1,710 @@
+{
+  "env": {
+    "python": "3.13.17",
+    "pycryptodome": "4.2.0",
+    "os": "Linux-6.18.44-fc-v165-x86_64-with-glibc2.39",
+    "cpu": "x86_64",
+    "cores": 2,
+    "aes_ni": true,
+    "timestamp": "2026-10-27T17:49:01"
+  },
+  "payloads": [
+    {
+      "payload": "nik",
+      "label": "NIK (field)",
+      "size": 16,
+      "cipher": "AES-256-GCM",
+      "enc": {
+        "median_ns": 122003.96551724138,
+        "p25_ns": 118370.08908045976,
+        "p75_ns": 132406.2816091954,
+        "min_ns": 117081.6724137931,
+        "cv": 0.18116574146120315,
+        "samples": 21,
+        "reps_per_sample": 174
+      },
+      "dec": {
+        "median_ns": 121321.42331288343,
+        "p25_ns": 119274.99079754601,
+        "p75_ns": 129790.16257668711,
+        "min_ns": 117126.60122699387,
+        "cv": 0.09087521696937655,
+        "samples": 21,
+        "reps_per_sample": 163
+      },
+      "overhead_bytes": 88,
+      "enc_mbps": 0.12506797625642468,
+      "dec_mbps": 0.12577159619326383
+    },
+    {
+      "payload": "nik",
+      "label": "NIK (field)",
+      "size": 16,
+      "cipher": "DES-CBC-HMAC",
+      "enc": {
+        "median_ns": 93806.48497854077,
+        "p25_ns": 91157.09012875537,
+        "p75_ns": 101719.05150214591,
+        "min_ns": 87005.63519313304,
+        "cv": 0.08137166775943214,
+        "samples": 21,
+        "reps_per_sample": 233
+      },
+      "dec": {
+        "median_ns": 98020.00578034682,
+        "p25_ns": 93843.87572254335,
+        "p75_ns": 104847.48554913295,
+        "min_ns": 89714.43352601156,
+        "cv": 0.22299189213100978,
+        "samples": 21,
+        "reps_per_sample": 173
+      },
+      "overhead_bytes": 116,
+      "enc_mbps": 0.16266241151654504,
+      "dec_mbps": 0.15567015060877923
+    },
+    {
+      "payload": "nik",
+      "label": "NIK (field)",
+      "size": 16,
+      "cipher": "RC4-HMAC",
+      "enc": {
+        "median_ns": 91228.86974789915,
+        "p25_ns": 88560.85294117648,
+        "p75_ns": 95511.76260504202,
+        "min_ns": 86851.80672268907,
+        "cv": 0.06969060358407411,
+        "samples": 21,
+        "reps_per_sample": 238
+      },
+      "dec": {
+        "median_ns": 90406.12037037036,
+        "p25_ns": 89316.43055555556,
+        "p75_ns": 93539.45833333334,
+        "min_ns": 87620.32407407407,
+        "cv": 0.03676039518616465,
+        "samples": 21,
+        "reps_per_sample": 216
+      },
+      "overhead_bytes": 108,
+      "enc_mbps": 0.16725833724199335,
+      "dec_mbps": 0.1687804874270537
+    },
+    {
+      "payload": "nik",
+      "label": "NIK (field)",
+      "size": 16,
+      "cipher": "HMAC plaintext (sekali)",
+      "enc": {
+        "median_ns": 2718.0230817217716,
+        "p25_ns": 2675.303103555833,
+        "p75_ns": 2813.7507018091083,
+        "min_ns": 2644.129132875858,
+        "cv": 0.09775167394564081,
+        "samples": 21,
+        "reps_per_sample": 6412
+      },
+      "dec": {
+        "median_ns": 2718.0230817217716,
+        "p25_ns": 2675.303103555833,
+        "p75_ns": 2813.7507018091083,
+        "min_ns": 2644.129132875858,
+        "cv": 0.09775167394564081,
+        "samples": 21,
+        "reps_per_sample": 6412
+      },
+      "overhead_bytes": 32,
+      "enc_mbps": 5.613929169738359,
+      "dec_mbps": 5.613929169738359
+    },
+    {
+      "payload": "kronologi",
+      "label": "Kronologi laporan",
+      "size": 2048,
+      "cipher": "AES-256-GCM",
+      "enc": {
+        "median_ns": 123582.38323353294,
+        "p25_ns": 122528.55688622754,
+        "p75_ns": 127296.32934131737,
+        "min_ns": 121255.92215568862,
+        "cv": 0.11306317071788773,
+        "samples": 21,
+        "reps_per_sample": 167
+      },
+      "dec": {
+        "median_ns": 124856.71232876713,
+        "p25_ns": 122968.46917808219,
+        "p75_ns": 131622.42123287672,
+        "min_ns": 121595.10273972603,
+        "cv": 0.045785694724232516,
+        "samples": 21,
+        "reps_per_sample": 146
+      },
+      "overhead_bytes": 88,
+      "enc_mbps": 15.804234785707203,
+      "dec_mbps": 15.642931513822967
+    },
+    {
+      "payload": "kronologi",
+      "label": "Kronologi laporan",
+      "size": 2048,
+      "cipher": "DES-CBC-HMAC",
+      "enc": {
+        "median_ns": 214206.97297297296,
+        "p25_ns": 195029.5900900901,
+        "p75_ns": 266872.4504504504,
+        "min_ns": 186286.31531531533,
+        "cv": 0.18713452028817773,
+        "samples": 21,
+        "reps_per_sample": 111
+      },
+      "dec": {
+        "median_ns": 197447.61403508772,
+        "p25_ns": 190564.3596491228,
+        "p75_ns": 200767.31578947368,
+        "min_ns": 185315.66666666666,
+        "cv": 0.07444099326537602,
+        "samples": 21,
+        "reps_per_sample": 114
+      },
+      "overhead_bytes": 116,
+      "enc_mbps": 9.117933804360472,
+      "dec_mbps": 9.891864277746688
+    },
+    {
+      "payload": "kronologi",
+      "label": "Kronologi laporan",
+      "size": 2048,
+      "cipher": "RC4-HMAC",
+      "enc": {
+        "median_ns": 103624.7578125,
+        "p25_ns": 100971.2890625,
+        "p75_ns": 107315.37890625,
+        "min_ns": 98391.5625,
+        "cv": 0.14753858032767328,
+        "samples": 21,
+        "reps_per_sample": 128
+      },
+      "dec": {
+        "median_ns": 103214.72511848342,
+        "p25_ns": 101775.67298578199,
+        "p75_ns": 105510.05213270141,
+        "min_ns": 99886.12322274882,
+        "cv": 0.04691665157327404,
+        "samples": 21,
+        "reps_per_sample": 211
+      },
+      "overhead_bytes": 108,
+      "enc_mbps": 18.8480537009699,
+      "dec_mbps": 18.922929821863566
+    },
+    {
+      "payload": "kronologi",
+      "label": "Kronologi laporan",
+      "size": 2048,
+      "cipher": "HMAC plaintext (sekali)",
+      "enc": {
+        "median_ns": 7951.745136186771,
+        "p25_ns": 7821.997470817121,
+        "p75_ns": 8232.712451361867,
+        "min_ns": 7724.927237354085,
+        "cv": 0.07646232232522618,
+        "samples": 21,
+        "reps_per_sample": 2570
+      },
+      "dec": {
+        "median_ns": 7951.745136186771,
+        "p25_ns": 7821.997470817121,
+        "p75_ns": 8232.712451361867,
+        "min_ns": 7724.927237354085,
+        "cv": 0.07646232232522618,
+        "samples": 21,
+        "reps_per_sample": 2570
+      },
+      "overhead_bytes": 32,
+      "enc_mbps": 245.62218312452273,
+      "dec_mbps": 245.62218312452273
+    },
+    {
+      "payload": "ktp",
+      "label": "Scan KTP",
+      "size": 614400,
+      "cipher": "AES-256-GCM",
+      "enc": {
+        "median_ns": 814623.24,
+        "p25_ns": 800279.28,
+        "p75_ns": 898771.0,
+        "min_ns": 782340.44,
+        "cv": 0.07866291555022406,
+        "samples": 21,
+        "reps_per_sample": 25
+      },
+      "dec": {
+        "median_ns": 886022.4,
+        "p25_ns": 821857.12,
+        "p75_ns": 958022.42,
+        "min_ns": 794574.48,
+        "cv": 0.12257766664162292,
+        "samples": 21,
+        "reps_per_sample": 25
+      },
+      "overhead_bytes": 88,
+      "enc_mbps": 719.274225468942,
+      "dec_mbps": 661.3122873642924
+    },
+    {
+      "payload": "ktp",
+      "label": "Scan KTP",
+      "size": 614400,
+      "cipher": "DES-CBC-HMAC",
+      "enc": {
+        "median_ns": 32586779.0,
+        "p25_ns": 30280209.0,
+        "p75_ns": 46322549.5,
+        "min_ns": 28721393.0,
+        "cv": 0.24218903385313253,
+        "samples": 21,
+        "reps_per_sample": 1
+      },
+      "dec": {
+        "median_ns": 31350012.0,
+        "p25_ns": 29362663.5,
+        "p75_ns": 33791931.0,
+        "min_ns": 28181065.0,
+        "cv": 0.16944614925642432,
+        "samples": 21,
+        "reps_per_sample": 1
+      },
+      "overhead_bytes": 116,
+      "enc_mbps": 17.980835111073727,
+      "dec_mbps": 18.690184233422304
+    },
+    {
+      "payload": "ktp",
+      "label": "Scan KTP",
+      "size": 614400,
+      "cipher": "RC4-HMAC",
+      "enc": {
+        "median_ns": 3852445.4,
+        "p25_ns": 3709203.9,
+        "p75_ns": 3923706.3,
+        "min_ns": 3614910.6,
+        "cv": 0.03901047345546496,
+        "samples": 21,
+        "reps_per_sample": 5
+      },
+      "dec": {
+        "median_ns": 3774057.25,
+        "p25_ns": 3660208.375,
+        "p75_ns": 4649468.125,
+        "min_ns": 3546073.75,
+        "cv": 0.15415891627845613,
+        "samples": 21,
+        "reps_per_sample": 4
+      },
+      "overhead_bytes": 108,
+      "enc_mbps": 152.0949524683724,
+      "dec_mbps": 155.25400416223152
+    },
+    {
+      "payload": "ktp",
+      "label": "Scan KTP",
+      "size": 614400,
+      "cipher": "HMAC plaintext (sekali)",
+      "enc": {
+        "median_ns": 1785101.1666666667,
+        "p25_ns": 1674785.375,
+        "p75_ns": 2286512.9166666665,
+        "min_ns": 1584143.8333333333,
+        "cv": 0.18638697477513091,
+        "samples": 21,
+        "reps_per_sample": 12
+      },
+      "dec": {
+        "median_ns": 1785101.1666666667,
+        "p25_ns": 1674785.375,
+        "p75_ns": 2286512.9166666665,
+        "min_ns": 1584143.8333333333,
+        "cv": 0.18638697477513091,
+        "samples": 21,
+        "reps_per_sample": 12
+      },
+      "overhead_bytes": 32,
+      "enc_mbps": 328.2376993199358,
+      "dec_mbps": 328.2376993199358
+    },
+    {
+      "payload": "dokumen",
+      "label": "Dokumen kantor",
+      "size": 3145728,
+      "cipher": "AES-256-GCM",
+      "enc": {
+        "median_ns": 3820596.0,
+        "p25_ns": 3781503.625,
+        "p75_ns": 4174528.0,
+        "min_ns": 3708707.0,
+        "cv": 0.10002942081631717,
+        "samples": 21,
+        "reps_per_sample": 4
+      },
+      "dec": {
+        "median_ns": 3944567.0,
+        "p25_ns": 3799250.666666667,
+        "p75_ns": 4455888.833333334,
+        "min_ns": 3661729.0,
+        "cv": 0.12025429684156037,
+        "samples": 21,
+        "reps_per_sample": 3
+      },
+      "overhead_bytes": 88,
+      "enc_mbps": 785.2178037143943,
+      "dec_mbps": 760.539749990303
+    },
+    {
+      "payload": "dokumen",
+      "label": "Dokumen kantor",
+      "size": 3145728,
+      "cipher": "DES-CBC-HMAC",
+      "enc": {
+        "median_ns": 158049109.0,
+        "p25_ns": 152027191.0,
+        "p75_ns": 169439293.5,
+        "min_ns": 147358913.0,
+        "cv": 0.06911162003740556,
+        "samples": 21,
+        "reps_per_sample": 1
+      },
+      "dec": {
+        "median_ns": 146478652.0,
+        "p25_ns": 142594421.0,
+        "p75_ns": 163318538.5,
+        "min_ns": 141134454.0,
+        "cv": 0.09648887195284737,
+        "samples": 21,
+        "reps_per_sample": 1
+      },
+      "overhead_bytes": 116,
+      "enc_mbps": 18.981442027616872,
+      "dec_mbps": 20.480800164654713
+    },
+    {
+      "payload": "dokumen",
+      "label": "Dokumen kantor",
+      "size": 3145728,
+      "cipher": "RC4-HMAC",
+      "enc": {
+        "median_ns": 17580443.0,
+        "p25_ns": 17515376.5,
+        "p75_ns": 17863015.0,
+        "min_ns": 17388559.0,
+        "cv": 0.05157868010036641,
+        "samples": 21,
+        "reps_per_sample": 1
+      },
+      "dec": {
+        "median_ns": 17630437.0,
+        "p25_ns": 17473873.5,
+        "p75_ns": 19701538.0,
+        "min_ns": 17322674.0,
+        "cv": 0.11018214371281707,
+        "samples": 21,
+        "reps_per_sample": 1
+      },
+      "overhead_bytes": 108,
+      "enc_mbps": 170.64416408619508,
+      "dec_mbps": 170.16027452978054
+    },
+    {
+      "payload": "dokumen",
+      "label": "Dokumen kantor",
+      "size": 3145728,
+      "cipher": "HMAC plaintext (sekali)",
+      "enc": {
+        "median_ns": 8522792.0,
+        "p25_ns": 8137979.25,
+        "p75_ns": 9391560.75,
+        "min_ns": 7964881.5,
+        "cv": 0.09627771735794308,
+        "samples": 21,
+        "reps_per_sample": 2
+      },
+      "dec": {
+        "median_ns": 8522792.0,
+        "p25_ns": 8137979.25,
+        "p75_ns": 9391560.75,
+        "min_ns": 7964881.5,
+        "cv": 0.09627771735794308,
+        "samples": 21,
+        "reps_per_sample": 2
+      },
+      "overhead_bytes": 32,
+      "enc_mbps": 351.9973266976362,
+      "dec_mbps": 351.9973266976362
+    },
+    {
+      "payload": "video",
+      "label": "Video bukti",
+      "size": 67108864,
+      "cipher": "AES-256-GCM",
+      "enc": {
+        "median_ns": 82734799.0,
+        "p25_ns": 78438546.5,
+        "p75_ns": 88657540.5,
+        "min_ns": 78138392.0,
+        "cv": 0.09561120563586535,
+        "samples": 9,
+        "reps_per_sample": 1
+      },
+      "dec": {
+        "median_ns": 87708253.0,
+        "p25_ns": 86271225.0,
+        "p75_ns": 90841654.0,
+        "min_ns": 85779741.0,
+        "cv": 0.026522656717386628,
+        "samples": 9,
+        "reps_per_sample": 1
+      },
+      "overhead_bytes": 88,
+      "enc_mbps": 773.5559978818586,
+      "dec_mbps": 729.6918797367906
+    },
+    {
+      "payload": "video",
+      "label": "Video bukti",
+      "size": 67108864,
+      "cipher": "DES-CBC-HMAC",
+      "enc": {
+        "median_ns": 3367527336.0,
+        "p25_ns": 3314345587.5,
+        "p75_ns": 3479362450.5,
+        "min_ns": 3245997174.0,
+        "cv": 0.02563155818207857,
+        "samples": 9,
+        "reps_per_sample": 1
+      },
+      "dec": {
+        "median_ns": 3262805208.0,
+        "p25_ns": 3180498085.5,
+        "p75_ns": 3436565981.0,
+        "min_ns": 3165193565.0,
+        "cv": 0.0365957946508407,
+        "samples": 9,
+        "reps_per_sample": 1
+      },
+      "overhead_bytes": 116,
+      "enc_mbps": 19.00504245825074,
+      "dec_mbps": 19.615023245359488
+    },
+    {
+      "payload": "video",
+      "label": "Video bukti",
+      "size": 67108864,
+      "cipher": "RC4-HMAC",
+      "enc": {
+        "median_ns": 398759600.0,
+        "p25_ns": 381586799.0,
+        "p75_ns": 413232328.0,
+        "min_ns": 378967335.0,
+        "cv": 0.03872918747014875,
+        "samples": 9,
+        "reps_per_sample": 1
+      },
+      "dec": {
+        "median_ns": 378564249.0,
+        "p25_ns": 365799490.5,
+        "p75_ns": 382863622.0,
+        "min_ns": 363789916.0,
+        "cv": 0.025567335662414495,
+        "samples": 9,
+        "reps_per_sample": 1
+      },
+      "overhead_bytes": 108,
+      "enc_mbps": 160.49770337817571,
+      "dec_mbps": 169.05980997693206
+    },
+    {
+      "payload": "video",
+      "label": "Video bukti",
+      "size": 67108864,
+      "cipher": "HMAC plaintext (sekali)",
+      "enc": {
+        "median_ns": 176529610.0,
+        "p25_ns": 173381138.5,
+        "p75_ns": 189635861.0,
+        "min_ns": 170139617.0,
+        "cv": 0.044361260532699044,
+        "samples": 9,
+        "reps_per_sample": 1
+      },
+      "dec": {
+        "median_ns": 176529610.0,
+        "p25_ns": 173381138.5,
+        "p75_ns": 189635861.0,
+        "min_ns": 170139617.0,
+        "cv": 0.044361260532699044,
+        "samples": 9,
+        "reps_per_sample": 1
+      },
+      "overhead_bytes": 32,
+      "enc_mbps": 362.54541093700936,
+      "dec_mbps": 362.54541093700936
+    }
+  ],
+  "primitives": [
+    {
+      "primitive": "AES-256-CTR",
+      "size": 16777216,
+      "median_ns": 15090703.0,
+      "p25_ns": 14883483.5,
+      "p75_ns": 15211991.5,
+      "min_ns": 14803751.0,
+      "cv": 0.031009264529232732,
+      "samples": 9,
+      "reps_per_sample": 1,
+      "mbps": 1060.2554433680127
+    },
+    {
+      "primitive": "AES-256-GCM (dgn tag)",
+      "size": 16777216,
+      "median_ns": 18155017.0,
+      "p25_ns": 18116160.5,
+      "p75_ns": 18294569.5,
+      "min_ns": 17942834.0,
+      "cv": 0.028760650920198434,
+      "samples": 9,
+      "reps_per_sample": 1,
+      "mbps": 881.2990921462647
+    },
+    {
+      "primitive": "DES-CBC",
+      "size": 16777216,
+      "median_ns": 804983203.0,
+      "p25_ns": 799353941.5,
+      "p75_ns": 822277798.5,
+      "min_ns": 786109304.0,
+      "cv": 0.039928584892257646,
+      "samples": 9,
+      "reps_per_sample": 1,
+      "mbps": 19.876191130909845
+    },
+    {
+      "primitive": "RC4-drop3072",
+      "size": 16777216,
+      "median_ns": 49227122.0,
+      "p25_ns": 48189177.0,
+      "p75_ns": 52048568.0,
+      "min_ns": 48004899.0,
+      "cv": 0.04091127903139591,
+      "samples": 9,
+      "reps_per_sample": 1,
+      "mbps": 325.0240792057679
+    },
+    {
+      "primitive": "HMAC-SHA256",
+      "size": 16777216,
+      "median_ns": 42974688.0,
+      "p25_ns": 42843492.5,
+      "p75_ns": 45539024.0,
+      "min_ns": 42414245.0,
+      "cv": 0.036174812397769054,
+      "samples": 9,
+      "reps_per_sample": 1,
+      "mbps": 372.3121852565864
+    }
+  ],
+  "setup_ns": {
+    "Total skema AES (0 byte)": 119183.65680473374,
+    "Total skema DES (0 byte)": 87687.51807228915,
+    "Total skema RC4 (0 byte)": 87999.01734104047,
+    "AES-GCM: inisialisasi + tag": 44293.27765726681,
+    "DES-CBC: inisialisasi": 6188.272480488633,
+    "RC4: inisialisasi tanpa drop": 3214.9371015724605,
+    "RC4: inisialisasi + drop 3072": 14951.683812405447,
+    "HMAC-SHA256: init + digest": 2362.03494434268,
+    "Key wrap AES-GCM (dipakai semua skema)": 62015.51884057971,
+    "Kunci acak os.urandom(48)": 617.4629522221417
+  },
+  "tamper": {
+    "AES-256-GCM": {
+      "trials": 2000,
+      "detected": 2000,
+      "silent": 0
+    },
+    "DES-CBC-HMAC": {
+      "trials": 2000,
+      "detected": 2000,
+      "silent": 0
+    },
+    "RC4-HMAC": {
+      "trials": 2000,
+      "detected": 2000,
+      "silent": 0
+    },
+    "AES-256-CTR (tanpa MAC)": {
+      "trials": 2000,
+      "detected": 0,
+      "silent": 2000,
+      "avg_plain_bits_changed": 1.0
+    },
+    "DES-CBC (tanpa MAC)": {
+      "trials": 2000,
+      "detected": 5,
+      "silent": 1995,
+      "avg_plain_bits_changed": 33.134335839599
+    },
+    "RC4 (tanpa MAC)": {
+      "trials": 2000,
+      "detected": 0,
+      "silent": 2000,
+      "avg_plain_bits_changed": 1.0
+    }
+  },
+  "forgery": {
+    "original": "Kerugian: Rp 1.000.000 ke rek BCA 1234567890 a.n. pelaku",
+    "RC4 tanpa MAC": "Kerugian: Rp 9.000.000 ke rek BCA 1234567890 a.n. pelaku",
+    "DES-CBC tanpa MAC": "#@\"�2k�: Rp 9.000.000 ke rek BCA 1234567890 a.n. pelaku",
+    "AES-256-GCM": "DITOLAK: integritas gagal",
+    "DES-CBC-HMAC": "DITOLAK: integritas gagal",
+    "RC4-HMAC": "DITOLAK: integritas gagal"
+  },
+  "rc4_bias": {
+    "drop=0": {
+      "n": 262144,
+      "p": 0.007389068603515625,
+      "ci95": [
+        0.007061222152596337,
+        0.007716915054434913
+      ],
+      "z_vs_uniform": 28.587138888037074
+    },
+    "drop=3072": {
+      "n": 262144,
+      "p": 0.003734588623046875,
+      "ci95": [
+        0.003501084248271574,
+        0.003968092997822176
+      ],
+      "z_vs_uniform": -1.4090046549415864
+    }
+  },
+  "brute_force": {
+    "DES": {
+      "key_bits": 56,
+      "keys_per_s_1core": 109767.38378195719,
+      "years_avg_1core": 10400.937368049186,
+      "years_avg_all_cores": 5200.468684024593
+    },
+    "AES-128": {
+      "key_bits": 128,
+      "keys_per_s_1core": 112783.87188880182,
+      "years_avg_1core": 4.780336649192011e+25,
+      "years_avg_all_cores": 2.3901683245960057e+25
+    }
+  },
+  "sweet32": {
+    "des_per_file_key": 1.862645149230957e-05,
+    "des_single_key_100GB": 1.0,
+    "aes_single_key_100GB": 6.617444900424221e-20,
+    "des_birthday_bound_GiB": 32.0
+  }
+}
