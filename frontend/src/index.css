@@ -1,0 +1,118 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "HuaweiSans", "Helvetica Neue", Arial, ui-sans-serif, system-ui, sans-serif;
+
+  --color-slate-50: #f3f3f3;
+  --color-slate-100: #eeeeee;
+  --color-slate-200: #e6e6e6;
+  --color-slate-300: #d4d4d4;
+  --color-slate-400: #aeaeae;
+  --color-slate-500: #666666;
+  --color-slate-600: #595757;
+  --color-slate-700: #333333;
+  --color-slate-800: #333333;
+  --color-slate-900: #191919;
+
+  --color-brand-50: #fdeced;
+  --color-brand-100: #f8cfd1;
+  --color-brand-600: #c7000b;
+  --color-brand-700: #c7000b;
+  --color-brand-800: #a3000a;
+  --color-brand-solid: #c7000b;
+  --color-brand-solid-hover: #e02128;
+  --color-surface: #ffffff;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 6px;
+  --radius-xl: 16px;
+
+  --shadow-card: 0 1px 6px 0 rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 8px 24px 0 rgba(0, 0, 0, 0.08);
+
+  --ease-standard: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.dark {
+  color-scheme: dark;
+  --color-surface: #141414;
+
+  --color-slate-50: #000000;
+  --color-slate-100: #1f1f1f;
+  --color-slate-200: #2e2e2e;
+  --color-slate-300: #777777;
+  --color-slate-400: #8c8c8c;
+  --color-slate-500: #aeaeae;
+  --color-slate-600: #c4c4c4;
+  --color-slate-700: #dddddd;
+  --color-slate-800: #f3f3f3;
+  --color-slate-900: #ffffff;
+
+  --color-brand-50: #2b0507;
+  --color-brand-100: #4d0a0e;
+  --color-brand-600: #e7434a;
+  --color-brand-700: #f06a70;
+  --color-brand-800: #f59ca0;
+
+  --color-emerald-50: #062a20;
+  --color-emerald-200: #065f46;
+  --color-emerald-600: #10b981;
+  --color-emerald-700: #34d399;
+  --color-emerald-800: #6ee7b7;
+
+  --color-red-50: #330f12;
+  --color-red-200: #7f1d1d;
+  --color-red-700: #f87171;
+  --color-red-800: #fca5a5;
+
+  --color-amber-50: #2b1d06;
+  --color-amber-200: #78350f;
+  --color-amber-700: #fbbf24;
+  --color-amber-800: #fcd34d;
+  --color-amber-900: #fde68a;
+
+  --color-sky-50: #08233a;
+  --color-sky-200: #075985;
+  --color-sky-700: #7dd3fc;
+  --color-sky-800: #bae6fd;
+}
+
+@utility card {
+  @apply rounded-xl border border-slate-200 bg-surface shadow-card;
+}
+@utility input {
+  @apply w-full rounded-sm border border-slate-300 bg-surface px-3 py-2 text-sm text-slate-800 transition-colors duration-200 ease-standard placeholder:text-slate-400 focus:border-brand-600;
+}
+@utility label {
+  @apply mb-1 block text-sm text-slate-700;
+}
+@utility btn {
+  @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg px-6 py-2.5 text-sm transition-colors duration-200 ease-standard disabled:cursor-not-allowed disabled:opacity-60;
+}
+@utility btn-primary {
+  @apply btn bg-brand-solid text-white hover:bg-brand-solid-hover;
+}
+@utility btn-secondary {
+  @apply btn border border-slate-700 bg-transparent text-slate-800 hover:border-brand-600 hover:bg-slate-900/5 hover:text-brand-700;
+}
+@utility btn-danger {
+  @apply btn border border-red-600 bg-transparent text-red-700 hover:bg-red-50;
+}
+@utility btn-sm {
+  @apply px-3 py-1.5 text-xs;
+}
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-800;
+    line-height: 1.5;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-600);
+    outline-offset: 2px;
+  }
+}
