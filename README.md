@@ -1,14 +1,16 @@
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/3730a5b4-8e55-4ae6-9e39-d44bc999a817" />
+
 <img width="1600" height="900" alt="image" src="https://github.com/user-attachments/assets/8f34d658-1cf2-485a-9272-defc1f83cdd2" />
 
 <img width="1918" height="965" alt="image" src="https://github.com/user-attachments/assets/1d110937-27da-4d8c-8ed1-23631c1c749b" />
 
 <img width="1918" height="961" alt="image" src="https://github.com/user-attachments/assets/cacec615-c7a6-4784-8c86-52c28e29430f" />
 
-# Safe Report — Phishing & Cyber Incident Reporting Portal
+# Safe Report - Campus Violence Reporting Portal
 
-Portal for a **Campus/Institutional CSIRT (Computer Security Incident Response Team)**. Victims or witnesses of phishing, online fraud, and account takeovers submit incident reports along with supporting evidence. CSIRT officers verify and respond to these reports.
+Portal for a Campus Task Force on Violence Prevention and Response. Victims or witnesses of sexual violence, bullying, physical or psychological abuse, discrimination, and online gender-based violence submit reports along with supporting evidence. Task force officers verify, support, and follow up on these reports.
 
-Report evidence almost always contains sensitive victim data: bank statements, photos of identity cards already sent to scammers, chat screen recordings. If breached, this data could be weaponized for secondary fraud. Therefore, all user data is encrypted prior to storage, and only the data owner can retrieve the original files.
+Violence reports almost always contain highly sensitive data: screenshots of harassment, photos or recordings, medical records, and survivors’ identities. If breached, this data could lead to re-victimization, intimidation, or retaliation. Therefore, all user data is encrypted prior to storage, and only the data owner can retrieve the original files. Reporters may also choose to file anonymously and track their report status without revealing their identity.
 
 - **Frontend:** React + Tailwind CSS (Vite)
 - **Backend:** FastAPI + Uvicorn, pycryptodome
