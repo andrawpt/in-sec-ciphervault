@@ -7,7 +7,7 @@ import FilePicker from '../../components/FilePicker'
 import VerifyResult from '../../components/VerifyResult'
 import { OwnerAccessPanel, ShareToggle } from '../../components/access'
 import { Alert, LengthHint, LockIcon, PageHeader, ProgressBar, Spinner, StatusBadge } from '../../components/ui'
-import { STATUS, STATUS_FLOW } from '../../lib/constants'
+import { STATUS, STATUS_FLOW, detectKind } from '../../lib/constants'
 import { formatBytes, formatDate, formatMs } from '../../lib/format'
 
 function StatusSteps({ status }) {
@@ -34,8 +34,7 @@ export default function ReportDetail() {
   const [verify, setVerify] = useState({})
   const [busy, setBusy] = useState('')
   const [note, setNote] = useState('')
-  const [newDocs, setNewDocs] = useState([])
-  const [newVideos, setNewVideos] = useState([])
+  const [newEvidence, setNewEvidence] = useState([])
   const [upProgress, setUpProgress] = useState(null)
   const [shareNew, setShareNew] = useState(true)
 
@@ -82,14 +81,13 @@ export default function ReportDetail() {
   }
 
   const uploadMore = async () => {
-    const queue = [...newDocs.map((f) => ['dokumen', f]), ...newVideos.map((f) => ['video', f])]
+    const queue = newEvidence.map((f) => [detectKind(f), f])
     setUpProgress(0)
     try {
       for (let i = 0; i < queue.length; i++) {
         const [kind, file] = queue[i]
         await uploadFile(`/reports/${id}/attachments`, { kind, file, share: String(shareNew) }, (v) => setUpProgress((i + v) / queue.length))
-        const drop = kind === 'dokumen' ? setNewDocs : setNewVideos
-        drop((list) => list.filter((f) => f !== file))
+        setNewEvidence((list) => list.filter((f) => f !== file))
       }
     } catch (e) {
       setError(e.message)
@@ -167,13 +165,10 @@ export default function ReportDetail() {
             {!closed && (
               <div className="mt-4 space-y-3 border-t border-slate-100 pt-4">
                 <h3 className="text-sm font-medium">Add evidence</h3>
-                <div className="grid gap-3 md:grid-cols-2">
-                  <FilePicker kind="dokumen" files={newDocs} onChange={setNewDocs} onError={setError} />
-                  <FilePicker kind="video" files={newVideos} onChange={setNewVideos} onError={setError} />
-                </div>
+                <FilePicker kind="evidence" files={newEvidence} onChange={setNewEvidence} onError={setError} />
                 <ShareToggle checked={shareNew} onChange={setShareNew} />
                 {upProgress != null && <ProgressBar value={upProgress} />}
-                <button className="btn-primary btn-sm" disabled={upProgress != null || newDocs.length + newVideos.length === 0} onClick={uploadMore}>
+                <button className="btn-primary btn-sm" disabled={upProgress != null || newEvidence.length === 0} onClick={uploadMore}>
                   {upProgress != null ? 'Uploading & encrypting…' : 'Upload'}
                 </button>
               </div>

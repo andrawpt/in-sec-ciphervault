@@ -21,6 +21,10 @@ export default function CaseDetail() {
   const [viewing, setViewing] = useState(null)
   const [requesting, setRequesting] = useState(null)
   const [reason, setReason] = useState('')
+  const [unlocking, setUnlocking] = useState(null)
+  const [keyInput, setKeyInput] = useState('')
+  const [unlocked, setUnlocked] = useState(() => new Set())
+  const [emails, setEmails] = useState(null)
 
   const load = useCallback(
     () =>
@@ -54,6 +58,15 @@ export default function CaseDetail() {
     setViewing(null)
     load()
   }, [load])
+
+  const loadEmails = async () => {
+    setError('')
+    try {
+      setEmails(await api.get('/officer/emails'))
+    } catch (e) {
+      setError(e.message)
+    }
+  }
 
   if (!c) return error ? <Alert>{error}</Alert> : <Spinner />
 
@@ -93,10 +106,39 @@ export default function CaseDetail() {
           </section>
 
           <section className="card p-5">
-            <h2 className="mb-1 font-semibold">Attachments</h2>
+            <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+              <h2 className="font-semibold">Attachments</h2>
+              <button type="button" className="btn-secondary btn-sm" onClick={() => (emails ? setEmails(null) : loadEmails())}>
+                {emails ? 'Hide Email Inbox' : 'Check Emailed Keys'}
+              </button>
+            </div>
             <p className="mb-3 flex items-center gap-1.5 text-xs text-slate-500">
               <LockIcon className="h-3.5 w-3.5" /> Only files permitted by the reporter can be viewed (preview, no download) during the open report status. Every access is logged and visible to the reporter.
             </p>
+            {emails && (
+              <div className="mb-4 rounded-lg border border-slate-200 bg-slate-50 p-3 text-xs">
+                <div className="mb-2 flex items-center justify-between font-medium text-slate-700">
+                  <span>Officer Email Inbox (RSA-Encrypted Share Keys)</span>
+                  <button type="button" className="text-brand-700 hover:underline" onClick={loadEmails}>Refresh</button>
+                </div>
+                {emails.length === 0 ? (
+                  <p className="text-slate-500">No share-key emails received yet.</p>
+                ) : (
+                  <ul className="space-y-2">
+                    {emails.map((em) => (
+                      <li key={em.id} className="rounded border border-slate-200 bg-surface p-2.5">
+                        <div className="flex flex-wrap items-center justify-between gap-2 font-medium text-slate-800">
+                          <span>{em.subject}</span>
+                          <span className="text-slate-400">{em.delivery_mode} · {formatDate(em.created_at)}</span>
+                        </div>
+                        <p className="mt-0.5 text-slate-500">To: {em.recipient_email}</p>
+                        <pre className="mt-1.5 max-h-28 overflow-auto rounded bg-slate-100 p-2 font-mono text-[11px] whitespace-pre-wrap break-all text-slate-700">{em.body}</pre>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
             {c.attachments.length === 0 ? (
               <p className="text-sm text-slate-500">No attachments.</p>
             ) : (
@@ -114,7 +156,13 @@ export default function CaseDetail() {
                         <span className="text-xs text-slate-500">{formatBytes(a.size)}</span>
                         <AccessBadge status={acc.status} />
                         {acc.officer_can_view ? (
-                          <button className="btn-primary btn-sm" onClick={() => setViewing({ path: `/officer/attachments/${a.id}/preview`, title: a.filename, openedAt: Date.now() })}>View</button>
+                          acc.has_emailed_key && !unlocked.has(a.id) ? (
+                            <button className="btn-primary btn-sm" onClick={() => { setUnlocking(a.id); setKeyInput('') }}>
+                              Unlock with Emailed Key
+                            </button>
+                          ) : (
+                            <button className="btn-primary btn-sm" onClick={() => setViewing({ path: `/officer/attachments/${a.id}/preview`, title: a.filename, openedAt: Date.now() })}>View</button>
+                          )
                         ) : canRequest ? (
                           <button className="btn-secondary btn-sm" onClick={() => { setRequesting(a.id); setReason('') }}>Request access</button>
                         ) : (
@@ -123,6 +171,50 @@ export default function CaseDetail() {
                       </div>
                       {!acc.officer_can_view && acc.reason_blocked && acc.status !== 'none' && (
                         <p className="mt-1 text-xs text-slate-500">{acc.reason_blocked}</p>
+                      )}
+                      {unlocking === a.id && (
+                        <form
+                          className="mt-2 space-y-2 rounded-lg bg-slate-50 p-3"
+                          onSubmit={(e) => {
+                            e.preventDefault()
+                            act(async () => {
+                              await api.post(`/officer/attachments/${a.id}/verify-share-key`, { encrypted_key_b64: keyInput })
+                              setUnlocked((prev) => new Set(prev).add(a.id))
+                              setUnlocking(null)
+                              setViewing({ path: `/officer/attachments/${a.id}/preview`, title: a.filename, openedAt: Date.now() })
+                            })
+                          }}
+                        >
+                          <p className="text-xs text-slate-600">
+                            Paste the RSA-encrypted symmetric key from your email to decrypt with your RSA-2048 private key:
+                          </p>
+                          <textarea
+                            className="input min-h-16 font-mono text-xs"
+                            placeholder="Paste Base64 RSA-encrypted share key from email..."
+                            required
+                            value={keyInput}
+                            onChange={(e) => setKeyInput(e.target.value)}
+                          />
+                          <div className="flex flex-wrap gap-2">
+                            <button className="btn-primary btn-sm" disabled={!keyInput.trim()}>Verify &amp; Open</button>
+                            <button
+                              type="button"
+                              className="btn-secondary btn-sm"
+                              onClick={async () => {
+                                const list = emails ?? (await api.get('/officer/emails'))
+                                if (!emails) setEmails(list)
+                                const match = list.find((em) => em.attachment_id === a.id)
+                                if (match) {
+                                  const b64 = match.body.split('\n').find((line) => /^[A-Za-z0-9+/=]{100,}$/.test(line.trim()))
+                                  if (b64) setKeyInput(b64.trim())
+                                }
+                              }}
+                            >
+                              Fill from Email
+                            </button>
+                            <button type="button" className="btn-secondary btn-sm" onClick={() => setUnlocking(null)}>Cancel</button>
+                          </div>
+                        </form>
                       )}
                       {requesting === a.id && (
                         <form

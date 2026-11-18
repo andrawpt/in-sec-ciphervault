@@ -4,7 +4,7 @@ import { api, uploadFile } from '../../api/client'
 import FilePicker from '../../components/FilePicker'
 import { ShareToggle } from '../../components/access'
 import { Alert, Field, KycBadge, LengthHint, PageHeader, ProgressBar, Spinner } from '../../components/ui'
-import { CATEGORIES, OFFICER_UNIT, categoryLabel } from '../../lib/constants'
+import { CATEGORIES, OFFICER_UNIT, categoryLabel, detectKind } from '../../lib/constants'
 
 const STEPS = ['Incident category', 'Chronology', 'Evidence', 'Submit']
 
@@ -19,8 +19,7 @@ export default function NewReport() {
   const [form, setForm] = useState({
     category: '', incident_date: '', title: '', chronology: '', incident_url: '', scammer_account: '', consent: false,
   })
-  const [docs, setDocs] = useState([])
-  const [videos, setVideos] = useState([])
+  const [evidence, setEvidence] = useState([])
   const [notShared, setNotShared] = useState(() => new Set())
   const [kyc, setKyc] = useState(null)
   const [error, setError] = useState('')
@@ -38,7 +37,8 @@ export default function NewReport() {
       }
     />
   )
-  const evidence = [...docs, ...videos]
+  const docsCount = evidence.filter((f) => detectKind(f) === 'dokumen').length
+  const videosCount = evidence.length - docsCount
   const sharedCount = evidence.filter((f) => !notShared.has(f)).length
 
   useEffect(() => {
@@ -54,10 +54,7 @@ export default function NewReport() {
 
   const submit = async () => {
     setError('')
-    const queue = [
-      ...docs.map((f) => ({ f, kind: 'dokumen' })),
-      ...videos.map((f) => ({ f, kind: 'video' })),
-    ]
+    const queue = evidence.map((f) => ({ f, kind: detectKind(f) }))
     setProgress(queue.map(({ f, kind }) => ({ name: f.name, kind, value: 0, status: 'waiting' })))
     const update = (i, patch) => setProgress((p) => p.map((x, j) => (j === i ? { ...x, ...patch } : x)))
 
@@ -181,14 +178,9 @@ export default function NewReport() {
         )}
 
         {step === 2 && (
-          <>
-            <Field label="Document evidence" hint="Chat screenshots, written timeline, medical/forensic report, etc.">
-              <FilePicker kind="dokumen" files={docs} onChange={setDocs} onError={setError} extra={shareExtra} />
-            </Field>
-            <Field label="Video evidence" hint="Incident footage, or screen recording of chat/posts.">
-              <FilePicker kind="video" files={videos} onChange={setVideos} onError={setError} extra={shareExtra} />
-            </Field>
-          </>
+          <Field label="Evidence" hint="Screenshots, documents, or incident videos.">
+            <FilePicker kind="evidence" files={evidence} onChange={setEvidence} onError={setError} extra={shareExtra} />
+          </Field>
         )}
 
         {step === 3 && (
@@ -196,8 +188,8 @@ export default function NewReport() {
             <dl className="grid gap-3 text-sm sm:grid-cols-2">
               <div><dt className="text-slate-500">Category</dt><dd className="font-medium">{categoryLabel(form.category)}</dd></div>
               <div><dt className="text-slate-500">Title</dt><dd className="font-medium">{form.title}</dd></div>
-              <div><dt className="text-slate-500">Documents</dt><dd>{docs.length} files</dd></div>
-              <div><dt className="text-slate-500">Videos</dt><dd>{videos.length} files</dd></div>
+              <div><dt className="text-slate-500">Documents &amp; images</dt><dd>{docsCount} files</dd></div>
+              <div><dt className="text-slate-500">Videos</dt><dd>{videosCount} files</dd></div>
               <div className="sm:col-span-2">
                 <dt className="text-slate-500">Officer access to evidence</dt>
                 <dd>

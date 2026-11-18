@@ -1,4 +1,5 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 
 const KEY = 'lapor_theme'
 const ThemeContext = createContext(null)
@@ -13,8 +14,9 @@ function read() {
 }
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState(read)
+  const [theme, setThemeState] = useState(read)
   const [systemDark, setSystemDark] = useState(() => media().matches)
+  const timerRef = useRef(null)
 
   useEffect(() => {
     const m = media()
@@ -32,6 +34,26 @@ export function ThemeProvider({ children }) {
     } catch {
     }
   }, [theme, dark])
+
+  const setTheme = (next) => {
+    const nextDark = next === 'dark' || (next === 'system' && media().matches)
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    if (!reduced && typeof document.startViewTransition === 'function') {
+      document.startViewTransition(() => {
+        document.documentElement.classList.toggle('dark', nextDark)
+        flushSync(() => setThemeState(next))
+      })
+      return
+    }
+
+    document.documentElement.classList.add('theme-transition')
+    window.clearTimeout(timerRef.current)
+    setThemeState(next)
+    timerRef.current = window.setTimeout(() => {
+      document.documentElement.classList.remove('theme-transition')
+    }, 380)
+  }
 
   return <ThemeContext.Provider value={{ theme, setTheme, dark }}>{children}</ThemeContext.Provider>
 }

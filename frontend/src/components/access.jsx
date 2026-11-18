@@ -32,11 +32,16 @@ export function ShareToggle({ checked, onChange }) {
 export function OwnerAccessPanel({ attachment, closed, onChanged, onError }) {
   const [busy, setBusy] = useState(false)
   const [showLog, setShowLog] = useState(false)
+  const [emailNote, setEmailNote] = useState(null)
   const acc = attachment.access
   const act = async (action) => {
     setBusy(true)
+    setEmailNote(null)
     try {
-      await api.put(`/attachments/${attachment.id}/access`, { action })
+      const res = await api.put(`/attachments/${attachment.id}/access`, { action })
+      if (res?.email_delivery) {
+        setEmailNote(res.email_delivery)
+      }
       onChanged()
     } catch (e) {
       onError(e.message)
@@ -50,6 +55,9 @@ export function OwnerAccessPanel({ attachment, closed, onChanged, onError }) {
       <div className="flex flex-wrap items-center gap-2">
         <span className="text-slate-500">Officer access:</span>
         <AccessBadge status={acc.status} />
+        {acc.has_emailed_key && acc.status === 'granted' && (
+          <span className="rounded bg-sky-50 px-2 py-0.5 font-medium text-sky-700">RSA key emailed</span>
+        )}
         {closed && acc.status === 'granted' && <span className="text-slate-500">(expired, report closed)</span>}
         {acc.view_count > 0 && (
           <button className="text-brand-700 hover:underline" onClick={() => setShowLog(!showLog)}>
@@ -78,6 +86,11 @@ export function OwnerAccessPanel({ attachment, closed, onChanged, onError }) {
             <button className="btn-secondary btn-sm" disabled={busy} onClick={() => act('deny')}>Deny</button>
           </div>
         </div>
+      )}
+      {emailNote && (
+        <p className="mt-2 rounded bg-emerald-50 px-2.5 py-1.5 text-emerald-800">
+          Symmetric share key generated, encrypted with officer RSA-2048 public key, and sent via email ({emailNote.recipient_email} · {emailNote.delivery_mode}).
+        </p>
       )}
       {showLog && (
         <ul className="mt-2 space-y-0.5 text-slate-600">
