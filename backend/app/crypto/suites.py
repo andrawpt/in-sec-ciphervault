@@ -3,8 +3,10 @@ import hmac
 import os
 from typing import BinaryIO, Iterator
 
-from Crypto.Cipher import AES, ARC4, DES
+from Crypto.Cipher import ARC4, DES
 from Crypto.Util.Padding import pad, unpad
+from cryptography.exceptions import InvalidTag
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
 CHUNK_SIZE = 1024 * 1024
 
@@ -21,14 +23,14 @@ def read_chunks(src: BinaryIO) -> Iterator[bytes]:
 class _GCMEncryptor:
     def __init__(self, key: bytes, aad: bytes):
         self.iv = os.urandom(12)
-        self._c = AES.new(key, AES.MODE_GCM, nonce=self.iv, mac_len=16)
-        self._c.update(aad)
+        self._c = Cipher(algorithms.AES(key), modes.GCM(self.iv)).encryptor()
+        self._c.authenticate_additional_data(aad)
 
     def update(self, data: bytes) -> bytes:
-        return self._c.encrypt(data)
+        return self._c.update(data)
 
     def finalize(self) -> tuple[bytes, bytes]:
-        return b"", self._c.digest()
+        return self._c.finalize(), self._c.tag
 
 
 class AESGCMSuite:
@@ -42,13 +44,13 @@ class AESGCMSuite:
         return _GCMEncryptor(key, aad)
 
     def decrypt_stream(self, key, aad, iv, tag, src: BinaryIO, dst) -> None:
-        c = AES.new(key, AES.MODE_GCM, nonce=iv, mac_len=16)
-        c.update(aad)
+        c = Cipher(algorithms.AES(key), modes.GCM(iv, tag)).decryptor()
+        c.authenticate_additional_data(aad)
         for chunk in read_chunks(src):
-            dst.write(c.decrypt(chunk))
+            dst.write(c.update(chunk))
         try:
-            c.verify(tag)
-        except ValueError as exc:
+            dst.write(c.finalize())
+        except InvalidTag as exc:
             raise IntegrityError("AES-GCM tag mismatch") from exc
 
 
