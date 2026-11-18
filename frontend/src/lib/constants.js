@@ -32,10 +32,22 @@ export const FILE_RULES = {
   ktp: { accept: '.jpg,.jpeg,.png,.pdf', maxMb: 10, label: 'JPG, PNG, or PDF, max 10 MB' },
   dokumen: {
     accept: '.jpg,.jpeg,.png,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.odt,.txt,.eml',
-    maxMb: 25,
-    label: 'Image (JPG/PNG), PDF, Word, Excel, PowerPoint, TXT, or EML, max 25 MB',
+    maxMb: null,
+    label: 'Image (JPG/PNG), PDF, Word, Excel, PowerPoint, TXT, or EML',
   },
-  video: { accept: '.mp4,.mov,.webm,.mkv', maxMb: 200, label: 'MP4, MOV, WEBM, or MKV, max 200 MB' },
+  video: { accept: '.mp4,.mov,.webm,.mkv', maxMb: null, label: 'MP4, MOV, WEBM, or MKV' },
+  evidence: {
+    accept: '.jpg,.jpeg,.png,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.odt,.txt,.eml,.mp4,.mov,.webm,.mkv',
+    maxMb: null,
+    label: 'Images, PDF, Office, TXT/EML, or Video (MP4/MOV/WEBM/MKV)',
+  },
+}
+
+const VIDEO_EXTS = FILE_RULES.video.accept.split(',')
+
+export function detectKind(file) {
+  const ext = '.' + file.name.split('.').pop().toLowerCase()
+  return VIDEO_EXTS.includes(ext) ? 'video' : 'dokumen'
 }
 
 export const KYC = {

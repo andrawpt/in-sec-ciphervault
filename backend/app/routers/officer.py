@@ -7,9 +7,10 @@ from starlette.background import BackgroundTask
 
 from .. import audit
 from ..crypto import vault
+from ..crypto.suites import IntegrityError
 from ..db import get_db
 from ..security import require_petugas
-from ..services import access
+from ..services import access, email_share
 from ..services import reports as svc
 from ..services.preview import INLINE_MIMES, TEXT_EXTRACT_MIMES, PreviewUnavailable, extract_text
 from ..validators import CATEGORIES, STATUSES, TRANSITIONS
@@ -145,6 +146,27 @@ def preview(att_id: str, user=Depends(require_petugas), db=Depends(get_db)):
     return response
 
 
+_EXT_SQL = """CASE a.mime
+                  WHEN 'image/jpeg' THEN 'JPG'
+                  WHEN 'image/png' THEN 'PNG'
+                  WHEN 'application/pdf' THEN 'PDF'
+                  WHEN 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' THEN 'DOCX'
+                  WHEN 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' THEN 'XLSX'
+                  WHEN 'application/vnd.openxmlformats-officedocument.presentationml.presentation' THEN 'PPTX'
+                  WHEN 'application/msword' THEN 'DOC'
+                  WHEN 'application/vnd.ms-excel' THEN 'XLS'
+                  WHEN 'application/vnd.ms-powerpoint' THEN 'PPT'
+                  WHEN 'application/vnd.oasis.opendocument.text' THEN 'ODT'
+                  WHEN 'text/plain' THEN 'TXT'
+                  WHEN 'message/rfc822' THEN 'EML'
+                  WHEN 'video/mp4' THEN 'MP4'
+                  WHEN 'video/quicktime' THEN 'MOV'
+                  WHEN 'video/webm' THEN 'WEBM'
+                  WHEN 'video/x-matroska' THEN 'MKV'
+                  ELSE UPPER(SUBSTR(a.mime, INSTR(a.mime, '/') + 1))
+              END"""
+
+
 @router.get("/stats")
 def stats(user=Depends(require_petugas), db=Depends(get_db)):
     by_status = {s: 0 for s in STATUSES}
@@ -165,10 +187,56 @@ def stats(user=Depends(require_petugas), db=Depends(get_db)):
            FROM encrypted_items
            WHERE path IS NOT NULL AND enc_ms > 0
            GROUP BY cipher ORDER BY cipher""")]
+    by_file_type = [dict(r) for r in db.execute(
+        f"""SELECT {_EXT_SQL} AS file_type,
+                  ei.cipher,
+                  COUNT(*) AS files,
+                  ROUND(SUM(ei.plain_size) / 1048576.0, 2) AS total_mb,
+                  ROUND(AVG(ei.enc_ms), 2) AS avg_enc_ms,
+                  ROUND(SUM(ei.enc_ms), 1) AS total_enc_ms,
+                  ROUND((SUM(ei.plain_size) / 1048576.0) / (SUM(ei.enc_ms) / 1000.0), 1) AS mb_per_s,
+                  ROUND(AVG(ei.cipher_size + LENGTH(ei.iv) + LENGTH(ei.tag) + LENGTH(ei.wrapped_key) - ei.plain_size), 0) AS avg_overhead_bytes
+           FROM encrypted_items ei
+           JOIN attachments a ON ei.ref_type = 'attachment' AND ei.ref_id = a.id
+           WHERE ei.path IS NOT NULL AND ei.enc_ms > 0
+           GROUP BY file_type, ei.cipher
+           ORDER BY file_type, ei.cipher""")]
     return {"total": sum(by_status.values()), "by_status": by_status,
-        "by_category": by_category, "encryption": crypto}
+        "by_category": by_category, "encryption": crypto, "encryption_by_type": by_file_type}
 
 
 @router.get("/audit")
 def audit_logs(limit: int = Query(100, ge=1, le=500), user=Depends(require_petugas), db=Depends(get_db)):
     return [dict(r) for r in db.execute("SELECT * FROM audit_logs ORDER BY id DESC LIMIT ?", (limit,))]
+
+
+class VerifyShareKeyIn(BaseModel):
+    encrypted_key_b64: str = Field(min_length=16, max_length=4096)
+
+
+@router.get("/emails")
+def officer_emails(user=Depends(require_petugas), db=Depends(get_db)):
+    return [dict(r) for r in db.execute(
+        "SELECT id, recipient_email, subject, body, attachment_id, delivery_mode, created_at "
+        "FROM email_outbox WHERE recipient_id=? ORDER BY created_at DESC LIMIT 30",
+        (user["id"],),
+    )]
+
+
+@router.post("/attachments/{att_id}/verify-share-key")
+def verify_share_key(att_id: str, body: VerifyShareKeyIn, user=Depends(require_petugas), db=Depends(get_db)):
+    att, report = _report_attachment(db, att_id)
+    ok, why = access.can_officer_view(db, att, report)
+    if not ok:
+        raise HTTPException(403, why)
+    try:
+        email_share.verify_emailed_key(
+            db, attachment_id=att_id, officer_id=user["id"], encrypted_key_b64=body.encrypted_key_b64,
+        )
+    except IntegrityError as exc:
+        audit.log(db, user, "officer.share_key_failed", "attachment", att_id)
+        db.commit()
+        raise HTTPException(403, str(exc)) from exc
+    audit.log(db, user, "officer.share_key_verified", "attachment", att_id)
+    db.commit()
+    return {"verified": True}

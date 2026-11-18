@@ -7,6 +7,8 @@ export default function FilePicker({ kind, files, onChange, multiple = true, onE
   const rule = FILE_RULES[kind]
   const exts = rule.accept.split(',')
 
+  const videoExts = FILE_RULES.video.accept.split(',')
+
   const add = (list) => {
     const next = multiple ? [...files] : []
     for (const f of list) {
@@ -15,8 +17,11 @@ export default function FilePicker({ kind, files, onChange, multiple = true, onE
         onError?.(`${f.name}: unsupported format (${rule.label})`)
         continue
       }
-      if (f.size > rule.maxMb * 1024 * 1024) {
-        onError?.(`${f.name}: exceeds ${rule.maxMb} MB`)
+      const limitMb = kind === 'evidence'
+        ? (videoExts.includes(ext) ? FILE_RULES.video.maxMb : FILE_RULES.dokumen.maxMb)
+        : rule.maxMb
+      if (limitMb != null && f.size > limitMb * 1024 * 1024) {
+        onError?.(`${f.name}: exceeds ${limitMb} MB`)
         continue
       }
       next.push(f)

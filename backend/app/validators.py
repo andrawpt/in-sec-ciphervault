@@ -31,7 +31,7 @@ KIND_RULES = {
         "exts": {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".pdf": "application/pdf"},
     },
     "dokumen": {
-        "max_mb": 25,
+        "max_mb": None,
         "exts": {
             ".jpg": "image/jpeg",
             ".jpeg": "image/jpeg",
@@ -49,7 +49,7 @@ KIND_RULES = {
         },
     },
     "video": {
-        "max_mb": 200,
+        "max_mb": None,
         "exts": {".mp4": "video/mp4", ".mov": "video/quicktime", ".webm": "video/webm", ".mkv": "video/x-matroska"},
     },
 }
