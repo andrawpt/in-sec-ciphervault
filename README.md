@@ -139,6 +139,13 @@ Each item is stored **three times**, encrypted with three different ciphers:
 
 **Full integrity verification:** During storage, an HMAC of the original plaintext is computed with `INTEGRITY_KEY`. During retrieval: unwrap key → verify ciphertext tag/HMAC → decrypt → verify plaintext HMAC. If any check fails, decryption aborts without releasing plaintext. The **Check 3 ciphers** tool decrypts all three copies and verifies bitwise equality with the original.
 
+### Visualization for Each Algorithms
+<img width="1600" height="720" alt="image" src="https://github.com/user-attachments/assets/60447bb8-5970-4688-beea-cd26404049f9" />
+
+<img width="1600" height="712" alt="image" src="https://github.com/user-attachments/assets/ef2bcd87-d696-4227-8597-591f68c60d37" />
+
+<img width="1600" height="706" alt="image" src="https://github.com/user-attachments/assets/fd2d7a29-61d1-4423-91ff-723716494eae" />
+
 ---
 
 ## Access Control
