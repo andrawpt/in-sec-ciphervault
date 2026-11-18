@@ -9,7 +9,7 @@ from .. import audit
 from ..crypto import vault
 from ..db import get_db
 from ..security import get_current_user, require_pelapor
-from ..services import access
+from ..services import access, email_share
 from ..services import reports as svc
 from .common import cipher_query
 
@@ -70,20 +70,33 @@ def set_access(att_id: str, body: AccessIn, user=Depends(require_pelapor), db=De
     if report["status"] in access.CLOSED and body.action == "grant":
         raise HTTPException(409, "Report is closed")
     current = access.status_of(db, att_id)
+    grant_row = access.get_grant(db, att_id)
+    delivery = None
     if body.action == "grant":
         if current == "granted":
             raise HTTPException(409, "This file is already permitted")
         access.set_grant(db, att, "granted", source="request" if current == "requested" else "owner")
+        if grant_row and grant_row["requested_by"]:
+            delivery = email_share.create_and_email_share_key(db, att=att, recipient_id=grant_row["requested_by"])
+            audit.log(db, user, "attachment.share_key_emailed", "attachment", att_id, f"mode={delivery['delivery_mode']}")
     elif body.action == "deny":
         if current != "requested":
             raise HTTPException(409, "No pending access request found")
         access.set_grant(db, att, "denied", source="request")
+        email_share.revoke_share_key(db, att_id)
     else:
         if current != "granted":
             raise HTTPException(409, "This file is not currently permitted")
         access.set_grant(db, att, "revoked", source="owner")
+        email_share.revoke_share_key(db, att_id)
     no = svc.attachment_no(db, att)
     svc.add_event(db, report, user, type_="note", note=_ACTION_TEXT[body.action].format(no=no, kind=att["kind"]))
     audit.log(db, user, f"attachment.access_{body.action}", "attachment", att_id)
     db.commit()
-    return {"status": access.status_of(db, att_id)}
+    res = {"status": access.status_of(db, att_id)}
+    if delivery:
+        res["email_delivery"] = {
+            "recipient_email": delivery["recipient_email"],
+            "delivery_mode": delivery["delivery_mode"],
+        }
+    return res

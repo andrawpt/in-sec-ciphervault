@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field, field_validator
 
 from .. import audit
-from ..crypto import vault
+from ..crypto import asymmetric, vault
 from ..db import get_db, new_id, now
 from ..security import blind_index, create_token, get_current_user, hash_password, verify_password
 from ..validators import EMAIL_RE, NIK_RE, PHONE_RE
@@ -67,6 +67,7 @@ def register(body: RegisterIn, db=Depends(get_db)):
     )
     for field in ("email", "full_name", "nik", "phone"):
         vault.store_text(db, getattr(body, field), owner_id=uid, ref_type="user", ref_id=uid, field=field)
+    asymmetric.ensure_user_keypair(db, uid)
     audit.log(db, {"id": uid, "role": "pelapor"}, "auth.register", "user", uid)
     db.commit()
     return {"id": uid}

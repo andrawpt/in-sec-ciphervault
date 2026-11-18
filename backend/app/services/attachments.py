@@ -21,7 +21,7 @@ def save_upload(db, upload: UploadFile, *, owner_id: str, kind: str, report_id: 
         allowed = ", ".join(sorted(rules["exts"]))
         raise HTTPException(415, f"Format {ext or '(without extension)'} is not supported for {kind}. Use: {allowed}")
 
-    max_bytes = min(rules["max_mb"], get_settings().max_upload_mb) * MB
+    max_bytes = None if rules["max_mb"] is None else min(rules["max_mb"], get_settings().max_upload_mb) * MB
     first = upload.file.read(CHUNK_SIZE)
     if not first:
         raise HTTPException(400, "File is empty")
@@ -32,7 +32,7 @@ def save_upload(db, upload: UploadFile, *, owner_id: str, kind: str, report_id: 
         total, chunk = 0, first
         while chunk:
             total += len(chunk)
-            if total > max_bytes:
+            if max_bytes is not None and total > max_bytes:
                 raise HTTPException(413, f"Maximum size for {kind} is {max_bytes // MB} MB")
             yield chunk
             chunk = upload.file.read(CHUNK_SIZE)

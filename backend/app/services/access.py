@@ -72,6 +72,7 @@ def access_info(db, att, report, *, for_owner: bool) -> dict:
         "requested_at": g["requested_at"] if g else None,
         "requested_by": _officer_name(db, g["requested_by"]) if g and g["requested_by"] else None,
         "request_reason": vault.read_text(db, "grant", att["id"], "reason") if g and g["requested_by"] else None,
+        "has_emailed_key": bool(db.execute("SELECT 1 FROM share_keys WHERE attachment_id=?", (att["id"],)).fetchone()),
     }
     views = db.execute(
         "SELECT actor_id, created_at FROM audit_logs WHERE action=? AND target_id=? ORDER BY id DESC",

@@ -107,3 +107,30 @@ CREATE TABLE IF NOT EXISTS audit_logs (
     detail      TEXT,
     created_at  TEXT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS user_keys (
+    user_id    TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+    public_key TEXT NOT NULL,
+    created_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS share_keys (
+    attachment_id     TEXT PRIMARY KEY REFERENCES attachments(id) ON DELETE CASCADE,
+    owner_id          TEXT NOT NULL,
+    recipient_id      TEXT NOT NULL,
+    key_hash          TEXT NOT NULL,
+    wrapped_share_key BLOB NOT NULL,
+    encrypted_key_b64 TEXT NOT NULL,
+    created_at        TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS email_outbox (
+    id              TEXT PRIMARY KEY,
+    recipient_id    TEXT NOT NULL,
+    recipient_email TEXT NOT NULL,
+    subject         TEXT NOT NULL,
+    body            TEXT NOT NULL,
+    attachment_id   TEXT,
+    delivery_mode   TEXT NOT NULL,
+    created_at      TEXT NOT NULL
+);

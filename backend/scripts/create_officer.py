@@ -2,7 +2,7 @@ import argparse
 import getpass
 import sys
 
-from app.crypto import vault
+from app.crypto import asymmetric, vault
 from app.db import connect, init_db, new_id, now
 from app.security import blind_index, hash_password
 
@@ -29,6 +29,7 @@ def main() -> None:
     )
     vault.store_text(db, email, owner_id=uid, ref_type="user", ref_id=uid, field="email")
     vault.store_text(db, a.name, owner_id=uid, ref_type="user", ref_id=uid, field="full_name")
+    asymmetric.ensure_user_keypair(db, uid)
     db.commit()
     print(f"Officer account {email} created.")
 
